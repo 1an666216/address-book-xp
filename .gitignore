@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+data/contacts.json
+data/*.tmp
+.env
+.DS_Store
+Thumbs.db
