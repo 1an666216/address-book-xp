@@ -14,7 +14,7 @@ SAMPLE = [
             {"type": "wechat", "value": "linxy_2024"},
             {"type": "address", "value": "福建省福州市大学城 福州大学旗山校区 12#302"},
         ],
-        "note": "结对编程搭档，负责前端界面。",
+        "note": "负责前端界面。",
     },
     {
         "name": "陈志强",

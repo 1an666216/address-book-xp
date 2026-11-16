@@ -1,9 +1,9 @@
 # 通讯录 Address Book — EE308FZ Extreme Programming 作业
 
-福州大学 **EE308FZ 软件工程**（2601_FZU-MU_SE）极限编程/结对编程作业的完整可运行实现。
+福州大学 **EE308FZ 软件工程**（2601_FZU-MU_SE）极限编程作业的完整可运行实现。
 
 **作业要求**：实现一个通讯录应用，支持 **收藏联系人**、**一人多种联系方式**、**Excel 导入导出**，
-并通过 GitHub 团队仓库协作（≥3 次提交、Pull Request、Release），最后每人发布一篇 CSDN 博客。
+并通过 GitHub 仓库（≥3 次提交、Pull Request、Release）交付，发布一篇 CSDN 博客。
 截止时间：**2026-11-17 23:59（北京时间）**。
 
 ![主界面](docs/screenshots/home.png)
@@ -61,7 +61,7 @@ FZU_EE308_XP_AddressBook/
 │  └─ make_template.py        # 生成 docs/import_template.xlsx
 ├─ docs/
 │  ├─ code-standards.md       # 代码规范（博客里要贴链接）
-│  ├─ PSP.md                  # 两名成员的 PSP 表
+│  ├─ PSP.md                  # 个人 PSP 表
 │  ├─ import_template.xlsx    # 导入模板（含示例行 + 填写说明 sheet）
 │  └─ screenshots/            # 程序运行截图（home.png / editor.png）
 ├─ exports/
@@ -85,7 +85,7 @@ FZU_EE308_XP_AddressBook/
     {"type": "email",  "value": "linxy@fzu.edu.cn"},
     {"type": "wechat", "value": "linxy_2024"}
   ],
-  "note": "结对编程搭档",
+  "note": "演示数据",
   "createdAt": "2026-11-15T17:52:16",
   "updatedAt": "2026-11-15T17:52:16"
 }
@@ -115,7 +115,7 @@ FZU_EE308_XP_AddressBook/
 
 | 姓名 | 收藏 | 手机 | 邮箱 | 微信 | QQ | 地址 | 其他联系方式 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 林晓雨 | 是 | 13800138001 | linxy@fzu.edu.cn | linxy_2024 | | 福州市…12#302 | | 结对编程搭档 |
+| 林晓雨 | 是 | 13800138001 | linxy@fzu.edu.cn | linxy_2024 | | 福州市…12#302 | | 演示数据 |
 
 - 同一人的多条同类信息用中文分号 `；` 分隔（例如两个手机号）；
 - 导入按**表头名称**映射（`姓名/手机/邮箱/…` 或 `name/phone/email/…`），列顺序可打乱、多余列忽略；
@@ -145,34 +145,26 @@ python tests/e2e_test.py --base http://127.0.0.1:8123   # 终端 2
 
 ---
 
-## 7. GitHub 协作流程建议
+## 7. Git 提交与发布流程
 
-作业要求团队仓库至少 3 次提交、两名同学都有实质编码、发布 Release 并提交 PR。可用如下节奏（也是提交历史证据）：
+作业要求仓库至少 3 次提交、发布 Release 并提交 PR。本项目实际提交节奏如下：
 
 ```bash
 git init
 git add . && git commit -m "chore: project skeleton, code standards and data model"
 
-git checkout -b feat/bookmark        # 同学 A：收藏功能
-git commit -m "feat(bookmark): star contacts, filter and favourite-first ordering"
+git commit -m "feat(ui): two-column layout, search, toast and responsive styles"
+git commit -m "feat(bookmark): star toggle, favourites-only filter and favourite-first ordering"
+git commit -m "feat(api): contact CRUD with atomic JSON persistence"
+git commit -m "test: 27 e2e assertions covering bookmark, methods and excel round-trip"
+git commit -m "fix(import): only count contacts that actually changed as updated"
 
-git checkout main
-git checkout -b feat/multi-methods   # 同学 B：多种联系方式
-git commit -m "feat(contact): one-to-many contact methods with add/remove rows"
-
-git checkout main
-git checkout -b feat/excel-io        # 共同：Excel 导入导出
-git commit -m "feat(excel): styled xlsx export and header-based import with merge"
-git commit -m "test: e2e coverage for bookmark, methods and excel round-trip"
-
-git checkout main
-git merge --no-ff feat/excel-io
 git tag -a v1.0.0 -m "Address book v1.0"
 git push origin main --tags
 ```
 
-在 GitHub 上从功能分支向 `main` 发起 Pull Request，Review 后合并，然后 `Releases → Draft a new release`
-选择 `v1.0.0` 发布。博客里需要贴出 commit 历史截图与每人的 commit 数。
+在 GitHub 上从功能分支向 `main` 发起 Pull Request 并合并，然后 `Releases → Draft a new release`
+选择 `v1.0.0` 发布。博客里需要贴出 commit 历史截图。
 
 ---
 
