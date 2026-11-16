@@ -285,8 +285,15 @@ def workbook_to_contacts(blob: bytes) -> list[dict]:
 
 
 def merge_imported(contacts: list[dict], imported: list[dict]) -> tuple[list[dict], dict]:
+    """Merge imported rows into the address book by name.
+
+    ``updated`` only counts contacts that actually gained a method, a bookmark
+    or a note; a row that matches an existing contact but carries nothing new is
+    counted as ``unchanged`` so the toast does not read "更新 5 人" when the user
+    re-imports the file they just exported.
+    """
     by_name = {c["name"]: c for c in contacts}
-    stats = {"imported": 0, "updated": 0, "methodsAdded": 0}
+    stats = {"imported": 0, "updated": 0, "unchanged": 0, "methodsAdded": 0}
     for item in imported:
         existing = by_name.get(item["name"])
         if existing is None:
@@ -295,18 +302,27 @@ def merge_imported(contacts: list[dict], imported: list[dict]) -> tuple[list[dic
             by_name[contact["name"]] = contact
             stats["imported"] += 1
             continue
-        stats["updated"] += 1
+
+        changed = False
         have = {(m["type"], m["value"]) for m in existing.get("methods", [])}
         for method in item["methods"]:
             if (method["type"], method["value"]) not in have:
                 existing.setdefault("methods", []).append(method)
                 have.add((method["type"], method["value"]))
                 stats["methodsAdded"] += 1
-        if item.get("bookmarked"):
+                changed = True
+        if item.get("bookmarked") and not existing.get("bookmarked"):
             existing["bookmarked"] = True
+            changed = True
         if item.get("note") and not existing.get("note"):
             existing["note"] = item["note"]
-        existing["updatedAt"] = _now()
+            changed = True
+
+        if changed:
+            existing["updatedAt"] = _now()
+            stats["updated"] += 1
+        else:
+            stats["unchanged"] += 1
     return contacts, stats
 
 

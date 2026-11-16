@@ -296,8 +296,11 @@ async function importExcel(file) {
       headers: { "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
       body: file,
     });
-    const { imported, updated, methodsAdded } = payload.stats;
-    toast(`导入完成：新增 ${imported} 人，更新 ${updated} 人，新增 ${methodsAdded} 条联系方式`);
+    const { imported, updated, unchanged = 0, methodsAdded } = payload.stats;
+    const parts = [`新增 ${imported} 人`, `更新 ${updated} 人`];
+    if (unchanged) parts.push(`无变化 ${unchanged} 人`);
+    parts.push(`新增 ${methodsAdded} 条联系方式`);
+    toast(`导入完成：${parts.join("，")}`);
     await refresh();
   } catch (error) {
     toast(error.message, true);
